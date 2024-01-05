@@ -8,6 +8,17 @@
 import SwiftUI
 
 struct SettingsView: View {
+    // MARK: - PROPERTIES
+    
+    private let alternateAppIcons: [String] = [
+        "AppIcon-MagnifyingGlass",
+        "AppIcon-Map",
+        "AppIcon-Mushroom",
+        "AppIcon-Camera",
+        "AppIcon-Backpack",
+        "AppIcon-Campfire"
+    ]
+    
     var body: some View {
         List {
             //MARK: - SECTION: HEADER
@@ -56,8 +67,93 @@ struct SettingsView: View {
             
             //MARK: - SECTION: ICONS
             
-            //MARK: - SECTION: ABOUT
+            Section {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 12) {
+                        ForEach(alternateAppIcons.indices, id: \.self) { item in
+                            Button(action: {
+                                print("\(alternateAppIcons[item])")
+                                
+                                UIApplication.shared.setAlternateIconName(alternateAppIcons[item]) { error in
+                                    if let error = error {
+                                        print("Failed request to update the app's icon: \(error.localizedDescription)")
+                                    }
+                                }
+                            }, label: {
+                                Image("\(alternateAppIcons[item])-Preview")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 80, height: 80)
+                                    .clipShape(RoundedRectangle(cornerRadius: 16))
+                            })
+                            .buttonStyle(.borderless)
+                        }
+                    }
+                } //: SCROLL VIEW
+                .padding(.top, 12)
+                
+                Text("Choose your favourite app icon from the collection above.")
+                    .frame(minWidth: /*@START_MENU_TOKEN@*/0/*@END_MENU_TOKEN@*/, maxWidth: /*@START_MENU_TOKEN@*/.infinity/*@END_MENU_TOKEN@*/)
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.secondary)
+                    .font(.footnote)
+                    .padding(.bottom, 12)
+            } header: {
+                Text("Alternate Icons")
+            } //: ICONS SECTION
+            .listRowSeparator(.hidden)
+
             
+            //MARK: - SECTION: ABOUT
+            Section (
+                header: Text("ABOUT THE APP"),
+                footer: HStack {
+                    Spacer()
+                    Text("Copyright All right reserved")
+                    Spacer()
+                }.padding(.vertical, 8)
+            ) {
+                //: 1. Basic Labeled Content
+               // LabeledContent("Application", value: "Hike")
+                
+                //: 2. Advanced Labeled Content
+                CustomListRowView(rowLabel: "Application",
+                                  rowIcon: "apps.iphone",
+                                  rowContent: "HIKE",
+                                  rowTintColor: .blue)
+                
+                CustomListRowView(rowLabel: "Compatibility",
+                                  rowIcon: "info.circle",
+                                  rowContent: "iOS, iPadOS",
+                                  rowTintColor: .red)
+                
+                CustomListRowView(rowLabel: "Technology",
+                                  rowIcon: "swift",
+                                  rowContent: "Swift",
+                                  rowTintColor: .orange)
+                
+                CustomListRowView(rowLabel: "Version",
+                                  rowIcon: "gear",
+                                  rowContent: "1.0",
+                                  rowTintColor: .purple)
+                
+                CustomListRowView(rowLabel: "Developer",
+                                  rowIcon: "ellipsis.curlybraces",
+                                  rowContent: "Ivan Romero",
+                                  rowTintColor: .mint)
+                
+                CustomListRowView(rowLabel: "Designer",
+                                  rowIcon: "paintpalette",
+                                  rowContent: "Ivan Romero",
+                                  rowTintColor: .pink)
+                
+                CustomListRowView(rowLabel: "Website",
+                                  rowIcon: "globe",
+                                  rowContent: nil,
+                                  rowTintColor: .indigo,
+                                  rowLinkLabel: "LinkedIn",
+                                  rowLinkDestination: "linkedin.com/in/ivan-manuel-romero")
+            }
         }
     }
 }
